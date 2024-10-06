@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            background: url('code-background.jpeg') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        nav ul li {
+            display: inline;
+            margin: 0 10px;
+        }
+
+        nav ul li a {
+            background: rgba(0, 0, 0, 0.8); /* Darker background */
+            padding: 10px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #fff;
+            transition: background 0.3s;
+        }
+
+        nav ul li a:active {
+            background: rgba(0, 0, 0, 1); /* Denser background on click */
+        }
+
+        form {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border: 1px solid #fff;
+        }
+
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            margin: 5px 0;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Lesley Phaahlamohlaka</h1>
+        <nav>
+            <ul>
+                <li><a href="#personal-info">Personal Info</a></li>
+                <li><a href="#education">Education</a></li>
+                <li><a href="#work-experience">Work Experience</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#projects">Projects</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="personal-info">
+        <h2>Personal Information</h2>
+        <form id="personal-info-form">
+            <input type="text" id="name" value="Lesley Phaahlamohlaka" readonly>
+            <input type="email" id="email" placeholder="Email" required>
+            <input type="tel" id="phone" placeholder="Phone Number" required>
+            <input type="text" id="address" placeholder="Address">
+            <textarea id="bio" placeholder="Short Bio" required></textarea>
+            <button type="submit">Save Info</button>
+        </form>
+    </section>
+
+    <section id="education">
+        <h2>Education</h2>
+        <form id="education-form">
+            <input type="text" id="degree" placeholder="Degree/Certification" required>
+            <input type="text" id="institution" placeholder="Institution Name" required>
+            <input type="text" id="graduation-year" placeholder="Year of Graduation" required>
+            <textarea id="education-details" placeholder="Additional Details (e.g., GPA, Relevant Coursework)"></textarea>
+            <button type="submit">Save Education</button>
+        </form>
+    </section>
+
+    <section id="work-experience">
+        <h2>Work Experience</h2>
+        <form id="work-experience-form">
+            <input type="text" id="job-title" placeholder="Job Title" required>
+            <input type="text" id="company" placeholder="Company Name" required>
+            <input type="text" id="job-dates" placeholder="Employment Dates" required>
+            <textarea id="work-experience-details" placeholder="Key Responsibilities and Achievements"></textarea>
+            <button type="submit">Save Work Experience</button>
+        </form>
+    </section>
+
+    <section id="skills">
+        <h2>Skills</h2>
+        <textarea id="skills-details" placeholder="List your skills (one per line)"></textarea>
+        <button onclick="saveSkills()">Save Skills</button>
+        <button onclick="addSkill()">Add Another Skill</button>
+    </section>
+
+    <section id="projects">
+        <h2>Projects</h2>
+        <form id="projects-form">
+            <input type="text" id="project-title" placeholder="Project Title" required>
+            <textarea id="project-description" placeholder="Project Description"></textarea>
+            <button type="submit">Save Project</button>
+        </form>
+    </section>
+
+    <footer>
+        <button onclick="downloadPDF()">Download My Data as PDF</button>
+    </footer>
+
+    <script>
+        // Save Personal Info
+        document.getElementById('personal-info-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const address = document.getElementById('address').value;
+            const bio = document.getElementById('bio').value;
+
+            localStorage.setItem('personalInfo', JSON.stringify({ email, phone, address, bio }));
+            alert('Personal info saved!');
+        });
+
+        // Save Education
+        document.getElementById('education-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const degree = document.getElementById('degree').value;
+            const institution = document.getElementById('institution').value;
+            const graduationYear = document.getElementById('graduation-year').value;
+            const educationDetails = document.getElementById('education-details').value;
+
+            const education = { degree, institution, graduationYear, educationDetails };
+            localStorage.setItem('education', JSON.stringify(education));
+            alert('Education details saved!');
+        });
+
+        // Save Work Experience
+        document.getElementById('work-experience-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const jobTitle = document.getElementById('job-title').value;
+            const company = document.getElementById('company').value;
+            const jobDates = document.getElementById('job-dates').value;
+            const workExperienceDetails = document.getElementById('work-experience-details').value;
+
+            const workExperience = { jobTitle, company, jobDates, workExperienceDetails };
+            localStorage.setItem('workExperience', JSON.stringify(workExperience));
+            alert('Work experience saved!');
+        });
+
+        // Save Skills
+        function saveSkills() {
+            const skillsDetails = document.getElementById('skills-details').value.split('\n');
+            localStorage.setItem('skills', JSON.stringify(skillsDetails.map(skill => skill.trim())));
+            alert('Skills saved!');
+        }
+
+        function addSkill() {
+            const skill = prompt("Enter another skill:");
+            if (skill) {
+                const skillsTextArea = document.getElementById('skills-details');
+                skillsTextArea.value += skill + '\n';
+            }
+        }
+
+        // Save Projects
+        document.getElementById('projects-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const projectTitle = document.getElementById('project-title').value;
+            const projectDescription = document.getElementById('project-description').value;
+
+            const projects = JSON.parse(localStorage.getItem('projects')) || [];
+            projects.push({ projectTitle, projectDescription });
+            localStorage.setItem('projects', JSON.stringify(projects));
+            alert('Project saved!');
+        });
+
+        // Download Data as PDF
+        function downloadPDF() {
+            const personalInfo = JSON.parse(localStorage.getItem('personalInfo'));
+            const education = JSON.parse(localStorage.getItem('education'));
+            const workExperience = JSON.parse(localStorage.getItem('workExperience'));
+            const skills = JSON.parse(localStorage.getItem('skills'));
+            const projects = JSON.parse(localStorage.getItem('projects'));
+
+            const doc = new jsPDF();
+
+            doc.text(`Name: Lesley Phaahlamohlaka`, 10, 10);
+            doc.text(`Email: ${personalInfo.email}`, 10, 20);
+            doc.text(`Phone: ${personalInfo.phone}`, 10, 30);
+            doc.text(`Address: ${personalInfo.address}`, 10, 40);
+            doc.text(`Bio: ${personalInfo.bio}`, 10, 50);
+
+            doc.text(`\nEducation:`, 10, 70);
+            doc.text(`Degree: ${education.degree}`, 10, 80);
+            doc.text(`Institution: ${education.institution}`, 10, 90);
+            doc.text(`Year: ${education.graduationYear}`, 10, 100);
+            doc.text(`Details: ${education.educationDetails}`, 10, 110);
+
+            doc.text(`\nWork Experience:`, 10, 130);
+            doc.text(`Job Title: ${workExperience.jobTitle}`, 10, 140);
+            doc.text(`Company: ${workExperience.company}`, 10, 150);
+            doc.text(`Dates: ${workExperience.jobDates}`, 10, 160);
+            doc.text(`Details: ${workExperience.workExperienceDetails}`, 10, 170);
+
+            doc.text(`\nSkills:`, 10, 190);
+            doc.text(skills.join(', '), 10, 200);
+
+            doc.text(`\nProjects:`, 10, 220);
+            projects.forEach((project, index) => {
+                doc.text(`${index + 1}. ${project.projectTitle}: ${project.projectDescription}`, 10, 230 + (index * 10));
+            });
+
+            doc.save('portfolio-data.pdf');
+        }
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+</body>
+</html>
